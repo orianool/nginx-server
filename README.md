@@ -70,6 +70,7 @@ This project builds two Docker images via `docker compose`:
 - `docker-compose.yaml` – runs `nginx` + `tester`
 - `tests/Dockerfile` – tester image build
 - `tests/server_test.py` – Python test script executed by `tester`
+- `tests/README.md` – Description tests preformed by server_test.py`
 - `.github/workflows/ci.yml` – GitHub Actions workflow
 
 ## Manual checks
@@ -99,6 +100,5 @@ The workflow:
 - Uploads an artifact containing a marker file:
   - `succeeded` if tests pass
   - `fail` if tests fail
-(Optional) logs can also be uploaded as a separate file like `compose.log`.
 ```bash
 sudo docker compose up --build --exit-code-from tester --abort-on-container-exit
