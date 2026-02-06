@@ -18,7 +18,7 @@ import ssl
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ALLOWED_STATUS_CODES = {200,501}
-LIMITED_STATUSES = {503, 429} 
+LIMITED_STATUS = 429 
 
 # exit codes mapping
 EXIT_CONNECT = 10
@@ -162,7 +162,7 @@ def limit_test(dest: str):
             status_code = future.result()
             if status_code in ALLOWED_STATUS_CODES:
                 ok += 1
-            elif status_code in LIMITED_STATUSES:
+            elif status_code == LIMITED_STATUS:
                 limited += 1
 
     if limited == 0:
