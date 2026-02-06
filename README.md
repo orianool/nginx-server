@@ -33,7 +33,7 @@ docker compose down -v --remove-orphans
 ### Endpoints
 - `http://localhost:8080/`
   - Serves a custom HTML page from `/usr/share/nginx/html/index.html`
-  - there is a small surprise, I recommend accessing the end point with Google Chrome if possible.
+  - There is a small surprise, I recommend accessing the endpoint with Google Chrome if possible.
 - `http://localhost:8081/`
   - Always returns an HTTP error (default `501`) and serves a custom error page body (`custom_501.html`).
   - `501 Not Implemented` seems to be the most fitting error since nothing is implemented on this endpoint.
