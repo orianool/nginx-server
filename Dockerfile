@@ -1,9 +1,16 @@
 FROM ubuntu:24.04
 
-# --no-install-recommends & rm -rf /var/lib/apt/lists/* to reduce the final image size.
-# if needed re-run apt-get update in later stages.
-RUN apt-get update && apt-get install -y --no-install-recommends nginx ca-certificates \
-    && rm -rf /var/lib/apt/lists/* 
+# Install nginx + openssl, generate a self-signed cert/key,
+# then remove openssl and /var/lib/apt/lists/* to keep the image small.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nginx openssl \
+    && mkdir -p /etc/nginx/ssl \
+    && openssl req -x509 -nodes -newkey rsa:2048 -days 365 \
+        -subj "/CN=localhost" \
+        -keyout /etc/nginx/ssl/selfsigned.key \
+        -out /etc/nginx/ssl/selfsigned.crt \   
+    && apt-get purge -y --auto-remove openssl \
+    && rm -rf /var/lib/apt/lists/*
 
 # remove default "welcome" server and free port 80 
 RUN rm -f /etc/nginx/sites-enabled/default

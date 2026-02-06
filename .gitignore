@@ -1,2 +1,4 @@
 nginx-dev.sh
 /tests/__pycache__/
+/venv/
+backup
