@@ -1,0 +1,38 @@
+name: nginx-server-CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  compose-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # downloads repo code into the GitHub  Actions runner workspace
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and run compose tests
+        run: docker compose up --build --exit-code-from tester --abort-on-container-exit
+
+      - name: Mark success
+        if: success()
+        run: echo ok > succeeded
+
+      - name: Mark failure
+        if: failure()
+        run: echo fail > fail
+
+      - name: Upload result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: result
+          path: |
+            succeeded
+            fail
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down -v --remove-orphans
