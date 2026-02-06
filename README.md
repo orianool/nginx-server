@@ -102,3 +102,4 @@ The workflow:
   - `fail` if tests fail
 ```bash
 sudo docker compose up --build --exit-code-from tester --abort-on-container-exit
+```

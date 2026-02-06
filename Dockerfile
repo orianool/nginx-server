@@ -8,7 +8,7 @@ RUN apt-get update \
     && openssl req -x509 -nodes -newkey rsa:2048 -days 365 \
         -subj "/CN=localhost" \
         -keyout /etc/nginx/ssl/selfsigned.key \
-        -out /etc/nginx/ssl/selfsigned.crt \   
+        -out /etc/nginx/ssl/selfsigned.crt \
     && apt-get purge -y --auto-remove openssl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -20,5 +20,5 @@ COPY ./servers.conf /etc/nginx/conf.d/servers.conf
 COPY ./html/index.html /usr/share/nginx/html/index.html
 COPY ./html/custom_501.html /usr/share/nginx/html/custom_501.html
 
-EXPOSE 8080 8081
+EXPOSE 8080 8081 8443
 CMD ["nginx", "-g", "daemon off;"]

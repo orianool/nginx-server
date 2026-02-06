@@ -42,46 +42,6 @@ class Test:
         self.headers = headers
         self.body = body
 
-def http_req(host: str, port: int, timeout: float, method: str):
-    """
-    Send one HTTP request and returns a tuple ((int)status_code, (dict)headers, (str)body)
-    
-    :param (str) host: hostname
-    :param (int) port: port
-    :param (float) timeout: timeout for connection
-    :param (str) method: method of http requset
-    """
-    conn = http.client.HTTPConnection(host, port, timeout=timeout)
-    try: 
-        conn.request(method, "/", headers={"Connection": "close", "User-Agent": "server_test.py"})
-        response = conn.getresponse()
-        body = response.read().decode("utf-8", errors="replace")
-        headers = dict(response.getheaders())
-        return response.status, body
-    finally:
-        conn.close()
-
-def https_req(host: str, port: int, timeout: float, method: str):
-    """
-    Send one HTTPS request and returns a tuple ((int)status_code, (dict)headers, (str)body)
-    
-    :param (str) host: hostname
-    :param (int) port: port
-    :param (float) timeout: timeout for connection
-    :param (str) method: method of http requset
-    """
-    ctx = ssl._create_unverified_context()
-    conn = http.client.HTTPSConnection(host, port, timeout=timeout, context=ctx)
-    try: 
-        conn.request(method, "/", headers={"Connection": "close", "User-Agent": "server_test.py"})
-        response = conn.getresponse()
-        body = response.read().decode("utf-8", errors="replace")
-        headers = dict(response.getheaders())
-        return response.status, body
-    finally:
-        conn.close()
-
-
 def req(host: str, port: int, proto: str, timeout: float, method: str):
     """
     Send one HTTP or HTTPS request and returns a tuple ((int)status_code, (dict)headers, (str)body)
@@ -166,7 +126,7 @@ def limit_test(dest: str):
                 limited += 1
 
     if limited == 0:
-        return (EXIT_STATUS, f"FAIL {proto}://{host}:{port} rate-limit: not triggered (no 503/429). ok={ok}/{total}")
+        return (EXIT_STATUS, f"FAIL {proto}://{host}:{port} rate-limit: not triggered (no 429). ok={ok}/{total}")
 
     return (0, f"OK {proto}://{host}:{port} rate-limit triggered. ok={ok}/{total} limited={limited}/{total}")
 
