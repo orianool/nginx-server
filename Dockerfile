@@ -10,10 +10,10 @@ RUN apt-get update \
         -keyout /etc/nginx/ssl/selfsigned.key \
         -out /etc/nginx/ssl/selfsigned.crt \
     && apt-get purge -y --auto-remove openssl \
-    && rm -rf /var/lib/apt/lists/*
-
-# remove default "welcome" server and free port 80 
-RUN rm -f /etc/nginx/sites-enabled/default
+    && rm -rf /var/lib/apt/lists/* \
+    # remove default "welcome" server and free port 80 
+    # NEW - combined with previous RUN to create one less layer
+    && rm -f /etc/nginx/sites-enabled/default 
 
 # add servers configuration and custom html page
 COPY ./servers.conf /etc/nginx/conf.d/servers.conf
